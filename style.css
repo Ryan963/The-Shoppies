@@ -190,14 +190,14 @@ nav {
 }
 
 .rating {
-    transform: translateX(-70px);
+    transform: translateX(-50px);
     opacity: 0;
-    transition: transform 0.2s ease-in,opacity 0.2s ease;
+    transition: transform 0.2s ease-in,opacity 0.2s ease-in;
 }
 .age {
-    transform: translateX(70px);
+    transform: translateX(50px);
     opacity: 0;
-    transition: transform 0.2s ease-in,opacity 0.2s ease;
+    transition: transform 0.2s ease-in,opacity 0.2s ease-in;
 }
 
 .movie:hover .rating, .movie:hover .age {
@@ -230,6 +230,36 @@ nav {
     padding: 5px;
     color: white;
     outline: 0;
+}
+
+.note-box {
+    width: 300px;
+    height: 150px;
+    position: fixed;
+    top:40vh;
+    left: 40vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.exit {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 0;
+    outline: none;
+}
+
+.note-box.show {
+    display: flex;
 }
 
 

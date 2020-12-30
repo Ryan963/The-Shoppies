@@ -32,12 +32,19 @@ async function displayMovies(movies){
             element.classList.add('genre')
             genreList.appendChild(element)
         })
+        let nominateBtnContent = 'Nominate'
+        nominationList.forEach((nominated) => {
+            if (nominated.id === data.imdbID){
+                nominateBtnContent = 'Remove'
+            }
+        })
+
         results.innerHTML += `
         <div class= 'movie' style="background-image:url(${data.Poster}) ">
             
             <div class="info">
             <div class = 'genres'>${genreList.innerHTML}</div>
-            <button class="nominate-btn" onclick="NominateMovie()">Nominate</button>
+            <button class="nominate-btn" onclick="NominateMovie()" data-id="${data.imdbID}">${nominateBtnContent}</button>
                 <div class=rate>
                     <div class='btn rating' >Rating:<i class="fas fa-star" style="color:yellow"></i>${data.imdbRating}</div>
                     <div class= 'btn age'>${data.Rated}</div>
@@ -50,32 +57,67 @@ async function displayMovies(movies){
         `
     }
 }
+function removeMovie(item,target){
+    const movieID = target.getAttribute('data-id')
+    results.removeChild(item)
+    nominationList = nominationList.filter(nominee => {
+        if (nominee.id !== movieID){
+            return nominee
+        }
+    })
+    
+}
 
 
 function NominateMovie(){
+    const noteBox = document.querySelector('.note-box')
     let target = event.target
     let item = target.parentNode.parentNode
     const background = item.getAttribute('style')
+    const movieID = target.getAttribute('data-id')
+    if (item.classList.contains('remove')){
+        removeMovie(item,target)
+        return
+    }
     if (target.innerHTML === 'Nominate'){
+        if (nominationList.length === 5){
+            noteBox.innerHTML += '<p>Your nomination List is full. You cannot add any more movies</p>'
+            displayBanner(noteBox) 
+            return
+        }
         target.innerHTML = 'Remove'  
-        nominationList.push({'content':item.innerHTML, 'poster':background})
+        nominationList.push({'content':item.innerHTML, 'poster':background, 'id':movieID})
+        if (nominationList.length === 5){
+            noteBox.innerHTML += '<p>Your Nomination List is now full. Thank your for taking the time to nominate your favorite movies.</p>'
+            displayBanner(noteBox)
+        }
     }
     else {
         target.innerHTML = 'Nominate'
-       nominationList = nominationList.filter(item => {
-           if (item.poster !== background){
+        nominationList = nominationList.filter(item => {
+           if (item.id !== movieID){
                return item
            }
        })
-        console.log(nominationList)
     }
+}
+function displayBanner(noteBox){
+    const exit = noteBox.querySelector('.exit')
+    const pElement = noteBox.querySelector('p')
+    noteBox.classList.add('show')
+    exit.addEventListener('click', () => {
+        noteBox.removeChild(pElement)
+        noteBox.classList.remove('show')
+    })
+    
+
 }
 
 function displayNominations(){
     results.innerHTML = '<button class="back" onclick="backtoSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>'
     for (let list of nominationList){
         results.innerHTML += `
-        <div class="movie" style="${list.poster}">${list.content}</div>
+        <div class="movie remove" style="${list.poster}">${list.content}</div>
         `
     }
 }
