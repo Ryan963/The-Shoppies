@@ -1,6 +1,6 @@
 const results = document.querySelector('.results')
 const search = document.getElementById('search')
-const nominationList = []
+let nominationList = []
 
 async function getMovies(e){
     e.preventDefault()
@@ -54,11 +54,21 @@ async function displayMovies(movies){
 
 function NominateMovie(){
     let target = event.target
-    target.innerHTML = 'Remove'
     let item = target.parentNode.parentNode
     const background = item.getAttribute('style')
-    nominationList.push({'content':item.innerHTML, 'poster':background})
-    console.log(background)
+    if (target.innerHTML === 'Nominate'){
+        target.innerHTML = 'Remove'  
+        nominationList.push({'content':item.innerHTML, 'poster':background})
+    }
+    else {
+        target.innerHTML = 'Nominate'
+       nominationList = nominationList.filter(item => {
+           if (item.poster !== background){
+               return item
+           }
+       })
+        console.log(nominationList)
+    }
 }
 
 function displayNominations(){
