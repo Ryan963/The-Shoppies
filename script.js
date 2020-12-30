@@ -8,10 +8,8 @@ async function getMovies(e){
         results.innerHTML = `Please Enter a movie keyword in the search box `
         return
     }
-    console.log(search.value)
     const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}`)
     const data =  await res.json()
-    console.log(data)
     if (data.Response === 'False'){
         results.innerHTML = `There is no results for search ${search.value}`
     }
@@ -66,7 +64,7 @@ function removeMovie(item,target){
         }
     })
     
-}
+};
 
 
 function NominateMovie(){
@@ -93,34 +91,34 @@ function NominateMovie(){
         }
     }
     else {
-        target.innerHTML = 'Nominate'
+        target.innerHTML = 'Nominate';
         nominationList = nominationList.filter(item => {
            if (item.id !== movieID){
                return item
-           }
-       })
-    }
+           };
+       });
+    };
 }
 function displayBanner(noteBox){
-    const exit = noteBox.querySelector('.exit')
-    const pElement = noteBox.querySelector('p')
-    noteBox.classList.add('show')
+    const exit = noteBox.querySelector('.exit');
+    const pElement = noteBox.querySelector('p');
+    noteBox.classList.add('show');
     exit.addEventListener('click', () => {
         noteBox.removeChild(pElement)
         noteBox.classList.remove('show')
-    })
+    });
     
 
 }
 
 function displayNominations(){
-    results.innerHTML = '<button class="back" onclick="backtoSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>'
+    results.innerHTML = '<button class="back" onclick="backtoSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>';
     for (let list of nominationList){
         results.innerHTML += `
         <div class="movie remove" style="${list.poster}">${list.content}</div>
         `
-    }
-}
+    };
+};
 
 async function backtoSearch(){
     const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}`)
@@ -130,13 +128,12 @@ async function backtoSearch(){
         results.innerHTML = `There is no results for search ${search.value}`
     }
     else { displayMovies(data.Search)}
-
-}
+};
 
 function events(){
     const form = document.getElementById('form')
     const nomination = document.getElementById('nominations')
     form.addEventListener('submit', getMovies)
     nomination.addEventListener('click', displayNominations)
-}
-events()
+};
+events();
