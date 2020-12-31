@@ -74,48 +74,6 @@ nav {
     max-width: 100%;
 }
 
-
-@media (max-width: 1400px){
-    .results {
-        grid-template-columns: repeat(4, 1fr);
-
-    }
-}
-@media (max-width: 1200px){
-    .results {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 850px){
-    .results {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    #search {
-        width: 30vw;
-    }
-
-}
-@media (max-width: 600px){
-    .results {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    nav {
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    #search {
-        width: 50vw;
-        margin: 40px 0;
-    }
-    .results {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-}
-
 .movie {
     border-radius: 15px;
     width: 250px;
@@ -238,7 +196,7 @@ nav {
     position: fixed;
     top:40vh;
     left: 40vw;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgb(46, 65, 124);
     border-radius: 10px;
     color: white;
     display: none;
@@ -246,20 +204,84 @@ nav {
     justify-content: center;
 }
 
-.exit {
-    background: none;
-    border: none;
+.btn.exit {
+    position: absolute;
+    cursor: pointer;
     font-size: 16px;
     color: white;
-    cursor: pointer;
+    outline: 0;
+    border: 0;
     position: absolute;
-    right: 10px;
-    top: 0;
-    outline: none;
+    bottom: 10px;
 }
 
 .note-box.show {
     display: flex;
+}
+
+#more {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+#more button {
+    cursor: pointer;
+    border: 0;
+    padding: 6px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    outline: 0;
+}
+
+@media (max-width: 1400px){
+    .results {
+        grid-template-columns: repeat(4, 1fr);
+
+    }
+}
+@media (max-width: 1200px){
+    .results {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 850px){
+    .results {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    #search {
+        width: 30vw;
+    }
+    .note-box {
+        top:40vh;
+        left: 160px;
+    }
+}
+@media (max-width: 600px){
+    .results {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    nav {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    #search {
+        width: 50vw;
+        margin: 40px 0;
+    }
+    .results {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .note-box {
+        top:40vh;
+        left: 100px;
+    }
 }
 
 

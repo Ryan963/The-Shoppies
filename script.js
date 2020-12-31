@@ -1,24 +1,28 @@
 const results = document.querySelector('.results')
 const search = document.getElementById('search')
 let nominationList = []
+let page = 1
 
 async function getMovies(e){
     e.preventDefault()
+    page = 1
     if (!search.value.trim()){
         results.innerHTML = `Please Enter a movie keyword in the search box `
         return
     }
-    const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}`)
+    const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
     const data =  await res.json()
+    console.log(data)
     if (data.Response === 'False'){
         results.innerHTML = `There is no results for search ${search.value}`
     }
-    else { displayMovies(data.Search)}
+    else { displayMovies(data.Search, Number(data.totalResults))}
     
 }
 
-async function displayMovies(movies){
+async function displayMovies(movies,totalResults){
     results.innerHTML = ''
+    const more = document.getElementById('more')
     for (let movie of movies){
         const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&i=${movie.imdbID}`)
         const data = await res.json()
@@ -51,10 +55,41 @@ async function displayMovies(movies){
             <div class=movie-title>
                 <h4>${data.Title} - ${data.Year}</h4>
         </div>
-        </div> 
-        `
+        </div>   `
+    }
+    if (totalResults > 10) {
+        more.innerHTML = `
+          ${
+            page > 1
+              ? `<button class="btn" onclick="getPrev()">Prev</button>`
+              : ''
+          }
+          ${
+            totalResults >= (page * 10)
+              ? `<button class="btn" onclick="getNext()">Next</button>`
+              : ''
+          }`
+    }
+    else {
+        more.innerHTML = ''
     }
 }
+
+
+function getPrev(){
+    page--
+    getSearch()
+}
+
+function getNext(){
+    page++
+    getSearch()
+}
+
+
+
+
+
 function removeMovie(item,target){
     const movieID = target.getAttribute('data-id')
     results.removeChild(item)
@@ -107,12 +142,10 @@ function displayBanner(noteBox){
         noteBox.removeChild(pElement)
         noteBox.classList.remove('show')
     });
-    
-
 }
 
 function displayNominations(){
-    results.innerHTML = '<button class="back" onclick="backtoSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>';
+    results.innerHTML = '<button class="back" onclick="getSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>';
     for (let list of nominationList){
         results.innerHTML += `
         <div class="movie remove" style="${list.poster}">${list.content}</div>
@@ -120,14 +153,13 @@ function displayNominations(){
     };
 };
 
-async function backtoSearch(){
-    const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}`)
+async function getSearch(){
+    const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
     const data =  await res.json()
-    console.log(data)
     if (data.Response === 'False'){
         results.innerHTML = `There is no results for search ${search.value}`
     }
-    else { displayMovies(data.Search)}
+    else { displayMovies(data.Search, Number(data.totalResults))}
 };
 
 function events(){
