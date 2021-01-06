@@ -156,6 +156,9 @@ function NominateMovie(){
     };
     save()
 }
+
+// display a popup when the user has 5 movies in nomination list
+// it also display a message whe nthe user try to add a movie when nomination list is full
 function displayBanner(noteBox){
     const popup = document.getElementById('popup')
     const exit = noteBox.querySelector('.exit');
@@ -164,6 +167,7 @@ function displayBanner(noteBox){
     exit.addEventListener('click', removeBanner)
 }
 
+// removes the pop up by clicking the okay button or anywhere outside the box
 function removeBanner(){
     const popup = document.getElementById('popup')
     const pElement = noteBox.querySelector('p');
@@ -172,6 +176,7 @@ function removeBanner(){
 
 }
 
+// displays nomination list 
 function displayNominations(){
     more.innerHTML = ''
     results.innerHTML = '<button class="back" onclick="getSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>';
@@ -182,6 +187,9 @@ function displayNominations(){
     };
 };
 
+// get search does the same thing as get movies however it is based on a click so there 
+// is no event parameter 
+// had to make this function because the other one has preventdefault statement which is giving an error when using it on clicks
 async function getSearch(){
     const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
     const data =  await res.json()
@@ -191,6 +199,7 @@ async function getSearch(){
     else { displayMovies(data.Search, Number(data.totalResults))}
 };
 
+// events handle the main event listeners and calls retrive to get the stored movies in nomination list 
 function events(){
     retrive()
     const form = document.getElementById('form')
