@@ -1,8 +1,27 @@
 const results = document.querySelector('.results')
 const search = document.getElementById('search')
+const more = document.getElementById('more')
+const noteBox = document.querySelector('.note-box')
 let nominationList = []
 let page = 1
 
+// saves the current nomination list to local storage
+function save(){
+    if (localStorage.getItem('movies') === null){
+        localStorage.setItem('movies', '[]')
+    }
+    else {
+        localStorage.setItem('movies', JSON.stringify(nominationList))
+    }
+ 
+}
+
+// retrive the current nomination list from local storage
+function retrive(){
+    nominationList = JSON.parse(localStorage.getItem('movies'))
+}
+
+// call an api with the search term to retrive the results
 async function getMovies(e){
     e.preventDefault()
     page = 1
@@ -12,17 +31,18 @@ async function getMovies(e){
     }
     const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
     const data =  await res.json()
-    console.log(data)
     if (data.Response === 'False'){
-        results.innerHTML = `There is no results for search ${search.value}`
+        results.innerHTML = `There are no results for search ${search.value}`
     }
     else { displayMovies(data.Search, Number(data.totalResults))}
     
 }
 
+
+// display the search results to the DOM and dislpay a next or prev buttons 
+// to go to next page
 async function displayMovies(movies,totalResults){
     results.innerHTML = ''
-    const more = document.getElementById('more')
     for (let movie of movies){
         const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&i=${movie.imdbID}`)
         const data = await res.json()
@@ -75,12 +95,13 @@ async function displayMovies(movies,totalResults){
     }
 }
 
-
+// decreases the page number then calls getsearch to fetch previous page to DOM
 function getPrev(){
     page--
     getSearch()
 }
 
+// increases page number  and calls getsearch to fetch next page to dom
 function getNext(){
     page++
     getSearch()
@@ -89,7 +110,7 @@ function getNext(){
 
 
 
-
+// removes a movie from nomination list and calls save to save the new list
 function removeMovie(item,target){
     const movieID = target.getAttribute('data-id')
     results.removeChild(item)
@@ -98,10 +119,10 @@ function removeMovie(item,target){
             return nominee
         }
     })
-    
+    save()
 };
 
-
+// adds a new movie to nomination list 
 function NominateMovie(){
     const noteBox = document.querySelector('.note-box')
     let target = event.target
@@ -133,18 +154,26 @@ function NominateMovie(){
            };
        });
     };
+    save()
 }
 function displayBanner(noteBox){
+    const popup = document.getElementById('popup')
     const exit = noteBox.querySelector('.exit');
     const pElement = noteBox.querySelector('p');
-    noteBox.classList.add('show');
-    exit.addEventListener('click', () => {
-        noteBox.removeChild(pElement)
-        noteBox.classList.remove('show')
-    });
+    popup.classList.add('show')
+    exit.addEventListener('click', removeBanner)
+}
+
+function removeBanner(){
+    const popup = document.getElementById('popup')
+    const pElement = noteBox.querySelector('p');
+    noteBox.removeChild(pElement)
+    popup.classList.remove('show')
+
 }
 
 function displayNominations(){
+    more.innerHTML = ''
     results.innerHTML = '<button class="back" onclick="getSearch()"><i class="fas fa-arrow-circle-left"></i>  back to search Results</button>';
     for (let list of nominationList){
         results.innerHTML += `
@@ -163,6 +192,7 @@ async function getSearch(){
 };
 
 function events(){
+    retrive()
     const form = document.getElementById('form')
     const nomination = document.getElementById('nominations')
     form.addEventListener('submit', getMovies)

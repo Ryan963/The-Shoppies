@@ -110,7 +110,6 @@ nav {
 }
 
 
-
 .genre, .btn {
     list-style: none;
     padding: 4px 6px;
@@ -199,7 +198,7 @@ nav {
     background-color: rgb(46, 65, 124);
     border-radius: 10px;
     color: white;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -215,8 +214,14 @@ nav {
     bottom: 10px;
 }
 
-.note-box.show {
-    display: flex;
+.block {
+    content: ' ';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #more {
@@ -234,6 +239,12 @@ nav {
     font-size: 16px;
     font-weight: 500;
     outline: 0;
+}
+#popup {
+    display: none;
+}
+#popup.show {
+    display: flex;
 }
 
 @media (max-width: 1400px){

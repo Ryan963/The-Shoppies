@@ -18,13 +18,17 @@
             <input type="text" id="search" placeholder="Enter movie keyword...">
             <button class="search-btn"><i class="fas fa-search"></i></button>
         </form>
-        <button id="nominations" >Nomination</button>
+        <button id="nominations" >Nominations</button>
     </nav>
     <div class="results"></div>
-    <div class="note-box">
-        <button class="btn exit" >Okay</button>
-
+    <div id= 'popup'>
+        <div class="block" onclick="removeBanner()"></div>
+         <div class="note-box">
+            <button class="btn exit" >Okay</button>
+        </div>
     </div>
+    
+    
     <div id="more"></div>
     <script src="script.js" ></script>
 </body>
