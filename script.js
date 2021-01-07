@@ -18,7 +18,10 @@ function save(){
 
 // retrive the current nomination list from local storage
 function retrive(){
-    nominationList = JSON.parse(localStorage.getItem('movies'))
+    if (localStorage.getItem('movies')){
+        nominationList = JSON.parse(localStorage.getItem('movies'))
+    }
+    
 }
 
 // call an api with the search term to retrive the results
@@ -29,7 +32,7 @@ async function getMovies(e){
         results.innerHTML = `Please Enter a movie keyword in the search box `
         return
     }
-    const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
+    const res = await fetch(`https://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
     const data =  await res.json()
     if (data.Response === 'False'){
         results.innerHTML = `There are no results for search ${search.value}`
@@ -44,7 +47,7 @@ async function getMovies(e){
 async function displayMovies(movies,totalResults){
     results.innerHTML = ''
     for (let movie of movies){
-        const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&i=${movie.imdbID}`)
+        const res = await fetch(`https://www.omdbapi.com/?apikey=1a241340&i=${movie.imdbID}`)
         const data = await res.json()
         const genre = data.Genre.split(', ').splice(0,3)
         const genreList = document.createElement('ul')
@@ -55,11 +58,14 @@ async function displayMovies(movies,totalResults){
             genreList.appendChild(element)
         })
         let nominateBtnContent = 'Nominate'
-        nominationList.forEach((nominated) => {
-            if (nominated.id === data.imdbID){
-                nominateBtnContent = 'Remove'
-            }
-        })
+        if (nominationList !== null){
+            nominationList.forEach((nominated) => {
+                if (nominated.id === data.imdbID){
+                    nominateBtnContent = 'Remove'
+                }
+            })
+        }
+        
 
         results.innerHTML += `
         <div class= 'movie' style="background-image:url(${data.Poster}) ">
@@ -191,7 +197,7 @@ function displayNominations(){
 // is no event parameter 
 // had to make this function because the other one has preventdefault statement which is giving an error when using it on clicks
 async function getSearch(){
-    const res = await fetch(`http://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
+    const res = await fetch(`https://www.omdbapi.com/?apikey=1a241340&s=${search.value}&type=movie&page=${page}`)
     const data =  await res.json()
     if (data.Response === 'False'){
         results.innerHTML = `There is no results for search ${search.value}`

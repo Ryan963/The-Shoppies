@@ -6,3 +6,4 @@ movies can be removed from nomination list by clicking the remove button which h
 user can remove a nominated movie from nomination list or from the search results 
 the page display only the first 10 results and to eccess the next page click next button at the bottom of the search
 you can go back and forth between searched movies by clicking next or prev buttons.
+your nomination list will be saved automatically so you can come back at any time and view your nominations as long as you are on the same device and browser
